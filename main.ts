@@ -1,7 +1,7 @@
 radio.onReceivedNumber(function (receivedNumber) {
-    if (receivedNumber == gauche) {
+    while (receivedNumber == gauche) {
         left = strip.range(12, 24)
-        for (let index = 0; index < 8; index++) {
+        for (let index = 0; index < 3; index++) {
             left.showColor(neopixel.colors(NeoPixelColors.Red))
             basic.showLeds(`
                 . . # . .
@@ -19,12 +19,12 @@ radio.onReceivedNumber(function (receivedNumber) {
                 . . . . .
                 `)
             left.showColor(neopixel.colors(NeoPixelColors.Black))
-            basic.pause(300)
         }
+        basic.pause(100)
     }
-    if (receivedNumber == droite) {
+    while (receivedNumber == droite) {
         right = strip.range(0, 12)
-        for (let index = 0; index < 8; index++) {
+        for (let index = 0; index < 3; index++) {
             right.showColor(neopixel.colors(NeoPixelColors.Red))
             basic.showLeds(`
                 . . # . .
@@ -34,7 +34,6 @@ radio.onReceivedNumber(function (receivedNumber) {
                 . . # . .
                 `)
             basic.pause(300)
-            right.showColor(neopixel.colors(NeoPixelColors.Black))
             basic.showLeds(`
                 . . . . .
                 . . . . .
@@ -42,15 +41,17 @@ radio.onReceivedNumber(function (receivedNumber) {
                 . . . . .
                 . . . . .
                 `)
+            right.showColor(neopixel.colors(NeoPixelColors.Black))
             basic.pause(300)
         }
+        basic.pause(100)
     }
 })
 input.onButtonPressed(Button.A, function () {
-    radio.sendString("" + (gauche))
+    radio.sendNumber(gauche)
 })
 input.onButtonPressed(Button.B, function () {
-    radio.sendString("" + (droite))
+    radio.sendNumber(droite)
 })
 let z2 = 0
 let z1 = 0
@@ -67,10 +68,13 @@ basic.forever(function () {
     z1 = input.acceleration(Dimension.Z)
     basic.pause(10)
     z2 = input.acceleration(Dimension.Z)
-    basic.pause(10)
-    if (z1 < z2) {
+    if (z1 > z2) {
         strip.showColor(neopixel.colors(NeoPixelColors.Red))
         basic.pause(3000)
-        strip.showColor(neopixel.colors(NeoPixelColors.Red))
+        strip.showColor(neopixel.colors(NeoPixelColors.Black))
+    }
+    if (z1 < z2) {
+        strip.showColor(neopixel.colors(NeoPixelColors.Black))
+        basic.pause(10)
     }
 })
