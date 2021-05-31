@@ -1,5 +1,5 @@
 radio.onReceivedNumber(function (receivedNumber) {
-    while (receivedNumber == gauche) {
+    if (receivedNumber == gauche) {
         left = strip.range(12, 24)
         for (let index = 0; index < 3; index++) {
             left.showColor(neopixel.colors(NeoPixelColors.Red))
@@ -20,49 +20,44 @@ radio.onReceivedNumber(function (receivedNumber) {
                 `)
             left.showColor(neopixel.colors(NeoPixelColors.Black))
         }
-        basic.pause(100)
-    }
-    while (receivedNumber == droite) {
-        right = strip.range(0, 12)
-        for (let index = 0; index < 3; index++) {
-            right.showColor(neopixel.colors(NeoPixelColors.Red))
-            basic.showLeds(`
-                . . # . .
-                . . . # .
-                # # # # #
-                . . . # .
-                . . # . .
-                `)
-            basic.pause(300)
-            basic.showLeds(`
-                . . . . .
-                . . . . .
-                . . . . .
-                . . . . .
-                . . . . .
-                `)
-            right.showColor(neopixel.colors(NeoPixelColors.Black))
-            basic.pause(300)
-        }
-        basic.pause(100)
     }
 })
 input.onButtonPressed(Button.A, function () {
     radio.sendNumber(gauche)
 })
+radio.onReceivedString(function (receivedString) {
+    right = strip.range(12, 24)
+    for (let index = 0; index < 3; index++) {
+        right.showColor(neopixel.colors(NeoPixelColors.Red))
+        basic.showLeds(`
+            . . # . .
+            . . . # .
+            # # # # #
+            . . . # .
+            . . # . .
+            `)
+        basic.pause(300)
+        basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            `)
+        right.showColor(neopixel.colors(NeoPixelColors.Black))
+    }
+})
 input.onButtonPressed(Button.B, function () {
-    radio.sendNumber(droite)
+    radio.sendString("DROITE")
 })
 let z2 = 0
 let z1 = 0
 let right: neopixel.Strip = null
 let left: neopixel.Strip = null
 let strip: neopixel.Strip = null
-let droite = 0
 let gauche = 0
 radio.setGroup(33)
 gauche = 0
-droite = 1
 strip = neopixel.create(DigitalPin.P0, 24, NeoPixelMode.RGB)
 basic.forever(function () {
     z1 = input.acceleration(Dimension.Z)
